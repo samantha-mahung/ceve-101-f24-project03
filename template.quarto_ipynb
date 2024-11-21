@@ -36,7 +36,7 @@
         "\n",
         "\n",
         "```{julia}\n",
-        "filepath = \"data/1.txt\" # <1>   \n",
+        "filepath = \"data/427.txt\" # <1>   \n",
         "rainfall_data = RainfallData(filepath) # <2>\n",
         "```\n",
         "\n",
@@ -61,9 +61,15 @@
         "\n",
         "1. This `plot` function is defined in [viz.jl](./RainwaterHarvesting/src/viz.jl) and is a thin wrapper around the Plots.jl package.\n",
         "\n",
+        "\n",
+        "```{julia}\n",
+        "rainfall_data.annual_data\n",
+        "```\n",
+        "\n",
+        "\n",
         "### Discussion\n",
         "\n",
-        "*Insert discussion here*\n",
+        "*drought=overestimate*\n",
         "\n",
         "## Understanding the Theoretical Model\n",
         "\n",
@@ -184,7 +190,7 @@
         "3. We check if any failures occurred.\n",
         "4. We print the number of years with failures and the total number of years."
       ],
-      "id": "58fb0b9a"
+      "id": "a8081818"
     }
   ],
   "metadata": {
