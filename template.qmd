@@ -50,7 +50,7 @@ plot(rainfall_data) # <1>
 
 ### Discussion
 
-*drought=overestimate*
+There are 49 years of rainfall data for Barbalha after cleaning, which is sufficient for meaningful risk assessments as it contains years with a wide variety of rainfall conditions including droughts. The most notable drought that can be recognized in the data lasted from 2012 to 2018 and was both the worst and most recent drought in Ceara's history. The only other drought in Ceara within the timeframe of the data that caused a significant decrease in rainfall in Barbalha happened in 1973 where there is another complete lack of rainfall data. The large gaps in the data would cause an overestimate in how much water Barbalha needs under typical rainfall conditions.
 
 ## Understanding the Theoretical Model
 
@@ -93,11 +93,7 @@ C_t = \begin{cases}
 \end{cases}
 $$
 
-This makes two major assumptiuons.
-First, the household begins using water from the tank after the 150th day of the year.
-This is based on the idea that the rainy season lasts for about the first 150 days of the year, and so they may have other sources of water before then.
-The second assumption is that each household consumes 74.1 liters per day during the dry season.
-How does this compare to your household's water usage?
+The two major assumptions made for this model are that residents only start using water from the tank after the rainy season and that each household uses 74.1 liters per day during the dry season. These are not concrete facts, so we must account for any variation from this assumed standard. To do so, we can conduct a city-wide survey on residents' change in water usage habits throughout the year and factor in our findings while also including a margin of error to contain any further fluctuations.
 
 ## Model Implementation and Testing
 
@@ -112,7 +108,7 @@ param = ModelParameters(          # <1>
     runoff_coefficient=0.85,      # <2>
     roof_area_m2=45.0,            # <3>
     first_flush_mm=2.0,           # <4>
-    tank_capacity_L=16000.0       # <5>
+    tank_capacity_L=32000.0       # <5>
 )
 ```
 
