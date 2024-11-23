@@ -61,12 +61,6 @@
         "\n",
         "1. This `plot` function is defined in [viz.jl](./RainwaterHarvesting/src/viz.jl) and is a thin wrapper around the Plots.jl package.\n",
         "\n",
-        "\n",
-        "```{julia}\n",
-        "rainfall_data.annual_data\n",
-        "```\n",
-        "\n",
-        "\n",
         "### Discussion\n",
         "\n",
         "*drought=overestimate*\n",
@@ -190,7 +184,7 @@
         "3. We check if any failures occurred.\n",
         "4. We print the number of years with failures and the total number of years."
       ],
-      "id": "a8081818"
+      "id": "e9d4e409"
     }
   ],
   "metadata": {
