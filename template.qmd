@@ -11,7 +11,7 @@ format:
 ---
 
 
-We begin by loading the required packages.
+
 
 ```{julia}
 using Revise                      # <1>
@@ -23,7 +23,7 @@ using RainwaterHarvesting         # <2>
 
 ### Setting the file path
 
-Next, we specify the path to the rainfall data file and read it in.
+
 
 ```{julia}
 filepath = "data/20.txt" # <1>   
@@ -33,14 +33,9 @@ rainfall_data = RainfallData(filepath) # <2>
 1. This is the path to the rainfall data file for the station of interest.
 2. This creates a `RainfallData` object containing the rainfall data for the specified station.
 
-If we dig under the hood a bit, we can see that there are two main pieces of information:
-
-- `station_info`: a dictionary containing information about the station, such as its name and location.
-- `annual_data`: a dictionary mapping years to `AnnualRainfallData` objects, each containing the date and precipitation data for a given year.
-
 ### Plotting the Data
 
-We can plot the data for one or all of the years to verify that it looks correct.
+
 
 ```{julia}
 plot(rainfall_data) # <1>
@@ -50,11 +45,11 @@ plot(rainfall_data) # <1>
 
 ### Discussion
 
-There are 49 years of rainfall data for Barbalha after cleaning, which is sufficient for meaningful risk assessments as it contains years with a wide variety of rainfall conditions including droughts. The most notable drought that can be recognized in the data lasted from 2012 to 2018 and was both the worst and most recent drought in Ceara's history. The only other drought in Ceara within the timeframe of the data that caused a significant decrease in rainfall in Barbalha happened in 1973 where there is another complete lack of rainfall data. The large gaps in the data would cause an overestimate in how much water Barbalha needs under typical rainfall conditions.
+There are 49 years of rainfall data for Barbalha after cleaning, which is sufficient for meaningful risk assessments as it contains years with a wide variety of rainfall conditions including droughts. The most notable drought that can be recognized in the data lasted from 2012 to 2018 and was both the worst and most recent drought in Ceara's history. The large gap in the data would cause an overestimate in how much water Barbalha needs under typical rainfall conditions.
 
 ## Understanding the Theoretical Model
 
-Let's explore the model that simulates the rainwater harvesting system.
+
 
 ### Mass Balance Equation
 
@@ -97,10 +92,13 @@ The two major assumptions made for this model are that residents only start usin
 
 ## Model Implementation and Testing
 
+With the current parameters, there is only one year out of 49 with failures. Decreasing the roof area and tank capacity increases the number of failures, while increasing the roof area and tank capacity has no effect. Even with an impossibly large tank, there is still one failure. This implies that there was essentially no water in one year, but it is more likely that there is just a year with extremely faulty data, and we cannot know if there was actually a failure in that year. Looking at the rest of the data, it seems the tank is already very reliable and suits the needs of Barbalha.
+
+The one major gap in these methods is, once again, the year of faulty data. It appears that the faulty year is 2011 since running the model using 2011's data comes up with an error. That year preceded Ceara's worst drought period but was not a part of it, so it does not make sense that there would be a failure in 2011 when there were no failures during the drought. To address the issue, it would be best to try and figure out what happened why the data is faulty or missing and adjust calculations accordingly. In any case, there should not have been a failure in that year when there were no failures in years with worse droughts, so the data from 2011 should be disregarded or recalculated.
+
 ### Defining the Model Parameters
 
-We can define the model parameters with sensible default values.
-You will have the opportunity to change these values later.
+
 
 ```{julia}
 #| output: false
@@ -120,12 +118,12 @@ param = ModelParameters(          # <1>
 
 ### Running the Simulation for One Year
 
-Let's run the model for the year 1981.
+Let's run the model for the year 2010.
 
 ```{julia}
-rainfall_1981 = rainfall_data.annual_data[1981]    # <1>
-results_1981 = run_timesteps(rainfall_1981, param) # <2>
-p1 = plot(results_1981)                                 # <3>
+rainfall_2010 = rainfall_data.annual_data[2010]    # <1>
+results_2010 = run_timesteps(rainfall_2010, param) # <2>
+p1 = plot(results_2010)                                 # <3>
 ```
 
 1. We select the annual rainfall data for the year 1981.
@@ -135,17 +133,15 @@ p1 = plot(results_1981)                                 # <3>
 To compare rainfall and tank volume:
 
 ```{julia}
-p2 = plot(rainfall_1981)
+p2 = plot(rainfall_2010)
 plot(p2, p1, layout=(2, 1), size=(1000, 700), link=:x)
 ```
 
-Observe how the tank's water level responds to rainfall events.
-Note any periods when the tank runs dry or overflows.
+
 
 ### Reliability Analysis
 
-We can run simulations for all years, one at a time, and then check how many times the tank runs dry.
-You can run simulations for all years at once with the following code:
+Even with the year of faulty data, the tank is extremely reliable with success 98% of the time. However, the default 16000 liter tank overflows, making it inefficient. Doubling the tank capacity helps increase the storage efficiency and reliability greatly.
 
 ```{julia}
 all_years = sort(collect(keys(rainfall_data.annual_data)))          # <1>
